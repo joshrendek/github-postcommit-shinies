@@ -1,7 +1,7 @@
 # Getting started
 Move config.yml.sample to config.yml and enter your details
 
-
+Start sinatra and point your repo's hook to the sinatra ip/port!
 
 # How to assign a user
 
