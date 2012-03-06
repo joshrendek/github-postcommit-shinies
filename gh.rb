@@ -2,8 +2,9 @@ require 'sinatra'
 require 'yaml'
 require 'json'
 require 'curb'
+require 'erubis'
 
-config = YAML::load(File.open('config.yml'))
+config = YAML::load(Erubis::Eruby.new(File.open('config.yml').read).result)
 
 set :sessions, true
 set :logging, true
@@ -61,14 +62,14 @@ post '/' do
         m = c['message']
         issue = m.scan(/[^\#][0-9]+/)
             if issue.size == 1 #only check for other goodies if an issue is mentioned
-                begin 
+                begin
                     user = m.scan(/\=[a-zA-Z0-9]+/)[0].split(//)[1..-1].join
                     assign_issue(owner, repo, issue[0], user)
                 rescue => e
                   p e.to_s
                 end
                 labels = m.scan(/\~[a-zA-Z0-9]+/)
-                labels.each do |l| 
+                labels.each do |l|
                     add_label(owner, repo, issue[0], l.gsub('~', ''))
                 end
             end
